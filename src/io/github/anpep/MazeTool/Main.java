@@ -3,6 +3,7 @@ package io.github.anpep.MazeTool;
 import io.github.anpep.MazeTool.model.Maze;
 import io.github.anpep.MazeTool.util.MazeReader;
 import io.github.anpep.MazeTool.util.MazeRenderer;
+import io.github.anpep.MazeTool.util.MazeWriter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,6 +18,7 @@ public class Main {
             try {
                 Maze maze = MazeReader.readFromFile(file.getAbsolutePath());
                 MazeRenderer.render(maze, "data/out/" + file.getName().replace(".json", ".png"));
+                MazeWriter.writeToFile(maze, "data/out/" + file.getName());
             } catch (Exception e) {
                 e.printStackTrace();
             }
