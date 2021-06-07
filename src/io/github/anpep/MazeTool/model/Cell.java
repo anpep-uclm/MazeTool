@@ -3,10 +3,10 @@ package io.github.anpep.MazeTool.model;
 import java.util.Objects;
 
 public class Cell {
-    private int m_row;
-    private int m_col;
-    private int m_value;
-    private boolean[] m_neighbors;
+    protected int m_row;
+    protected int m_col;
+    protected int m_value;
+    protected boolean[] m_neighbors;
 
     public Cell(int row, int col) {
         m_row = row;
@@ -15,7 +15,7 @@ public class Cell {
         m_neighbors = new boolean[] { true, true, true, true };
     }
 
-    public Cell(int row, int col, int neighbor_count, int value, boolean[] neighbors) {
+    public Cell(int row, int col, int value, boolean[] neighbors) {
         this(row, col);
         m_value = value;
         m_neighbors = neighbors;
