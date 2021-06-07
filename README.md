@@ -95,7 +95,7 @@ directly inherits the `Cell` class that is used to represent a maze cell. In add
 identified by a tuple `(row, col)` that contains the zero-based indices of the row and column where this cell lies within
 the maze.
 
-## 2. Search Problem Definition
+## 2. Search Problems
 A search problem, like every maze, is given as a JSON file consisting of three properties, with the following format:
 ```json5
 {
@@ -118,4 +118,56 @@ final Maze maze = problem.getMaze(); // puzzle_5x5.json, as per the JSON definit
 final SearchProblem problem = /* ... */;
 SearchProblemWriter.writeToFile(problem, "problem_5x5.json");
 ```
+
+### 2.2. _Node_ Software Artifact
+The `SearchTreeNode` class represents a _node_ in the search tree. It has the following properties:
+- **ID:** A unique, numeric identifier for this tree node.
+- **State:** Access to the state space for that node.
+- **Value:** Value of the node according to the applied search algorithm (more on this later on in this document).
+- **Depth:** Depth of the node in the search tree.
+- **Cost:** An accumulative quantity that refers to the algorithmic cost incurred in traversing the associated cell.
+- **Heuristic:** A double-precision floating-point value that is automatically caculated upon node addition that is defined
+by search algorithms.
+- **Action/Move:** Action performed in this state. Possible values are:
+    - `NORTH` (move to the north): `(-1, 0)`
+    - `EAST` (move to the east): `(0, +1)`
+    - `SOUTH` (move to the south): `(1, 0)`
+    - `WEST` (move to the west): `(0, -1)`
+    - `NOT_SET` (no action done, e.g. in the root node)
+    
+Tree nodes will be placed on a priority queue (the *frontier*), so they need to have some means of sorting them.
+To this end, `SearchTreeNode` objects implement the `Comparable<SearchTreeNode>` interface, which means they can be compared
+against another node. Following the criteria specified by the problem statement, the order of sorting is as follows:
+1. Value
+2. State Row
+3. State Column
+4. Node ID
+
+This comparison is performed by calculating a _score_ that computes a _hash function_ that gives the weight stated above
+to each of these properties in order to obtain a value that can be compared numerically (see `SearchTreeNode.getSortingScore()`).
+
+Tree nodes can be created by using the `SearchTreeNodeFactory` facility. This class is intended to be used **only** for
+performing the tests that are mandated by the problem statement, as discussed later on.
+
+### 2.3. _Frontier_ Software Artifact
+The _frontier_ has to be a collection of node artifacts following the sorting order stated in _2.1_.
+It must implement the following operations while maintatining the original sorting order:
+- **Push** (insert a new element): `Frontier.add(node: SearchTreeNode): void`
+- **Pop** (remove the last element): `Frontier.remove(): SearchTreeNode`
+
+With these considerations, we simply **inherit** the `PriorityQueue<SearchTreeNode>` type from the Java runtime, which
+yields the exact desired outcome with the desired behavior.
+
+### 2.4. Search Algorithms
+The following search algorithms must be implemented, as per the original problem statement:
+- **A*** (`a_star`) with a heuristic value defined as `node.heuristic + node.cost`.
+- **Breadth-First (BFS)** (`breadth`) with a heuristic value defined as `node.depth`.
+- **Depth-First (DFS)** (`depth`) with a heuristic value defined as `1 / (1 + node.depth)`.
+- **Greedy** (`greedy`) with a heuristic value defined as `node.heuristic`.
+- **Uniform Cost** (`ucost`) with a heuristic value defined as `node.cost`.
+
+Search algorithms are represented by classes implementing the `ISearchAlgorithm` interface, which requires two methods
+to be implemented:
+1. `getHeuristic(node: SearchTreeNode): double` (defining heuristic)
+2. `toString(): String` (path-friendly display name for the algorithm)
 
