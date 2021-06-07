@@ -1,18 +1,24 @@
 package io.github.anpep.MazeTool.model;
 
+import io.github.anpep.MazeTool.algorithm.ISearchAlgorithm;
+
 public class SearchTreeNode implements Comparable<SearchTreeNode> {
     private final int m_id;
     private final State m_state;
     private final int m_value;
     private final int m_depth;
     private final int m_cost;
-    private final int m_heuristic;
+    private double m_heuristic;
     private final Move m_action;
     private final SearchTreeNode m_parentNode;
 
     private static int s_idCounter = 0;
 
-    public SearchTreeNode(State state, int value, int depth, int cost, int heuristic, Move action, SearchTreeNode parentNode) {
+    public static void resetIDCounter() {
+        s_idCounter = 0;
+    }
+
+    public SearchTreeNode(State state, int value, int depth, int cost, double heuristic, Move action, SearchTreeNode parentNode) {
         m_id = s_idCounter++;
         m_state = state;
         m_value = value;
@@ -21,6 +27,11 @@ public class SearchTreeNode implements Comparable<SearchTreeNode> {
         m_heuristic = heuristic;
         m_action = action;
         m_parentNode = parentNode;
+    }
+
+    public SearchTreeNode(State state, int value, int depth, int cost, ISearchAlgorithm algorithm, Move action, SearchTreeNode parent) {
+        this(state, value, depth, cost, 0.0, action, parent);
+        m_heuristic = algorithm.getHeuristic(this);
     }
 
     public int getID() {
@@ -43,7 +54,7 @@ public class SearchTreeNode implements Comparable<SearchTreeNode> {
         return m_cost;
     }
 
-    public int getHeuristic() {
+    public double getHeuristic() {
         return m_heuristic;
     }
 
@@ -61,7 +72,7 @@ public class SearchTreeNode implements Comparable<SearchTreeNode> {
 
     @Override
     public String toString() {
-        return String.format("[%d][%d, %s, %d, '%s', %d, %d, %d]", m_id, m_cost, m_state, m_parentNode == null ? -1 : m_parentNode.getID(), m_action, m_depth, m_heuristic, m_value);
+        return String.format("[%d][%d, %s, %d, '%s', %d, %f, %d]", m_id, m_cost, m_state, m_parentNode == null ? -1 : m_parentNode.getID(), m_action, m_depth, m_heuristic, m_value);
     }
 
     @Override

@@ -20,9 +20,9 @@ public class Maze {
         m_cols = cols;
         m_cells = new Cell[rows][cols];
 
-        for (int i = 0; i < rows; i++)
-            for (int j = 0; j < cols; j++)
-                m_cells[i][j] = new Cell(i, j);
+        for (int row = 0; row < rows; row++)
+            for (int col = 0; col < cols; col++)
+                m_cells[row][col] = new Cell(row, col);
     }
 
     public int getRows() {
@@ -37,11 +37,7 @@ public class Maze {
         return m_cells;
     }
 
-    public Cell getCell(int i, int j) {
-        return m_cells[i][j];
-    }
-
-    public void setCell(int i, int j, Cell cell) {
-        m_cells[i][j] = cell;
+    public Cell getCell(int row, int col) {
+        return m_cells[row][col];
     }
 }
