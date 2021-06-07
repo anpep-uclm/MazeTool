@@ -12,7 +12,7 @@ public class Cell {
         m_row = row;
         m_col = col;
         m_value = 0;
-        m_neighbors = new boolean[4];
+        m_neighbors = new boolean[] { true, true, true, true };
     }
 
     public Cell(int row, int col, int neighbor_count, int value, boolean[] neighbors) {
@@ -38,7 +38,7 @@ public class Cell {
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
-        Cell cell = (Cell) object;
+        final Cell cell = (Cell) object;
         return m_row == cell.m_row && m_col == cell.m_col;
     }
 

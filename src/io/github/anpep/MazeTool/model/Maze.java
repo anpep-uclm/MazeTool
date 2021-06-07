@@ -13,13 +13,7 @@ public class Maze {
 
     private int m_rows;
     private int m_cols;
-    private int m_neighbor_count;
     private Cell[][] m_cells;
-
-    private BoxedCell m_initial_cell;
-    private BoxedCell[][] m_generation_cells;
-    private ArrayList<BoxedCell> m_generation_cells_remaining;
-    private Stack<BoxedCell> m_previous_cells;
 
     public Maze(int rows, int cols) {
         m_rows = rows;
