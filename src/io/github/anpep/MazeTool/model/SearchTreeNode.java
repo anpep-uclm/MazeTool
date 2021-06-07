@@ -1,6 +1,6 @@
 package io.github.anpep.MazeTool.model;
 
-public class SearchTreeNode {
+public class SearchTreeNode implements Comparable<SearchTreeNode> {
     private final int m_id;
     private final State m_state;
     private final int m_value;
@@ -55,8 +55,17 @@ public class SearchTreeNode {
         return m_parentNode;
     }
 
+    private int getSortScore() {
+        return (int) (1e3 * getValue() + 1e2 * getState().getRow() + 1e1 * getState().getCol() + 1e0 * getID());
+    }
+
     @Override
     public String toString() {
-        return String.format("[%d][%d, %s, %d, '%s', %d, %d, %d]", m_id, m_cost, m_state, m_parentNode.getID(), m_action, m_depth, m_heuristic, m_value);
+        return String.format("[%d][%d, %s, %d, '%s', %d, %d, %d]", m_id, m_cost, m_state, m_parentNode == null ? -1 : m_parentNode.getID(), m_action, m_depth, m_heuristic, m_value);
+    }
+
+    @Override
+    public int compareTo(SearchTreeNode node) {
+        return getSortScore() - node.getSortScore();
     }
 }
