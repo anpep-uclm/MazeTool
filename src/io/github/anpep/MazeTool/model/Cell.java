@@ -24,7 +24,6 @@ public class Cell {
     public void setNeighbor(int neighbor_index, boolean present) {
         m_neighbors[neighbor_index] = present;
     }
-
     public void setValue(int value) {
         m_value = value;
     }
